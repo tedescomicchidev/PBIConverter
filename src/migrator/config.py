@@ -11,7 +11,10 @@ try:  # pragma: no cover - optional dependency
 except Exception:  # pragma: no cover - fallback
     yaml = None  # type: ignore
 
-from pydantic import BaseModel, Field
+try:  # pragma: no cover - optional dependency
+    from pydantic import BaseModel, Field  # type: ignore
+except Exception:  # pragma: no cover - fallback
+    from ._compat.pydantic import BaseModel, Field
 
 
 class AzureSettings(BaseModel):

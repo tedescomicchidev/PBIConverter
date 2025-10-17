@@ -1,6 +1,5 @@
 import json
 from pathlib import Path
-
 from typer.testing import CliRunner
 
 from migrator.cli import app
@@ -34,6 +33,21 @@ def test_cli_dry_run(tmp_path: Path) -> None:
     manifest_path = tmp_path / "manifest.yaml"
     manifest_path.write_text(json.dumps(manifest))
 
+    settings = {
+        "azure": {
+            "tenant_id": "t",
+            "client_id": "c",
+            "client_secret": "s",
+        },
+        "workspaces": {
+            "default_workspace_id": "00000000-0000-0000-0000-000000000000",
+            "xmla_endpoint": "endpoint",
+        },
+        "naming": {"dataset_prefix": "UNIT_", "report_prefix": "UNIT_"},
+    }
+    settings_path = tmp_path / "settings.yaml"
+    settings_path.write_text(json.dumps(settings))
+
     runner = CliRunner()
     result = runner.invoke(
         app,
@@ -44,6 +58,8 @@ def test_cli_dry_run(tmp_path: Path) -> None:
             "--dry-run",
             "--out",
             str(tmp_path / "out"),
+            "--settings",
+            str(settings_path),
         ],
     )
     assert result.exit_code == 0

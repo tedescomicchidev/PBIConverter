@@ -1,7 +1,5 @@
-"""Testing helpers for the Typer shim."""
+"""Expose the fallback CliRunner under the expected namespace."""
 
-from __future__ import annotations
-
-from . import CliRunner
+from migrator._compat.typer import CliRunner
 
 __all__ = ["CliRunner"]

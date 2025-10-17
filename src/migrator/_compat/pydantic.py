@@ -1,30 +1,35 @@
-"""Lightweight subset of Pydantic used for tests."""
+"""Lightweight subset of Pydantic used as an offline fallback."""
 
 from __future__ import annotations
 
 import json
+from dataclasses import dataclass
 from typing import Any, Dict, List, Optional, Tuple, Type, TypeVar, get_args, get_origin, get_type_hints
 
 
 _T = TypeVar("_T", bound="BaseModel")
 
 
+@dataclass
 class FieldInfo:
-    def __init__(self, default: Any, alias: Optional[str] = None, description: Optional[str] = None):
-        self.default = default
-        self.alias = alias
-        self.description = description
+    default: Any
+    alias: Optional[str] = None
+    description: Optional[str] = None
 
 
 def Field(default: Any, *, alias: Optional[str] = None, description: Optional[str] = None) -> FieldInfo:
+    """Emulate :func:`pydantic.Field` for simple use-cases."""
+
     return FieldInfo(default=default, alias=alias, description=description)
 
 
 class BaseModel:
-    __field_defaults__: Dict[str, Tuple[Any, Optional[str]]] = {}
-    __field_types__: Dict[str, Any] = {}
+    """Minimal drop-in replacement for :class:`pydantic.BaseModel`."""
 
-    def __init_subclass__(cls) -> None:
+    __field_defaults__: Dict[str, Tuple[Any, Optional[str]]]
+    __field_types__: Dict[str, Any]
+
+    def __init_subclass__(cls) -> None:  # pragma: no cover - behaviour validated indirectly
         cls.__field_defaults__ = {}
         cls.__field_types__ = get_type_hints(cls)
         for name, annotation in cls.__field_types__.items():
@@ -33,10 +38,10 @@ class BaseModel:
                 default = attr.default
                 alias = attr.alias or name
                 cls.__field_defaults__[name] = (default, alias)
-                if default is not ...:
-                    setattr(cls, name, default)
-                else:
+                if default is ...:
                     setattr(cls, name, None)
+                else:
+                    setattr(cls, name, default)
             else:
                 cls.__field_defaults__[name] = (attr, name)
 
@@ -101,3 +106,6 @@ class BaseModel:
         if isinstance(value, list):
             return [cls._serialize(item) for item in value]
         return value
+
+
+__all__ = ["BaseModel", "Field"]

@@ -2,10 +2,12 @@
 
 from __future__ import annotations
 
-import json
 from typing import Optional
 
-import requests
+try:  # pragma: no cover - optional dependency
+    import requests  # type: ignore
+except Exception:  # pragma: no cover - fallback
+    from .._compat import requests
 
 from ..config import Settings
 from ..logging import get_logger

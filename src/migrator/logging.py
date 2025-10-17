@@ -7,7 +7,10 @@ import logging
 from pathlib import Path
 from typing import Any
 
-from rich.logging import RichHandler
+try:  # pragma: no cover - optional dependency
+    from rich.logging import RichHandler  # type: ignore
+except Exception:  # pragma: no cover - fallback
+    RichHandler = None  # type: ignore
 
 
 _LOGGER_NAME = "migrator"
@@ -25,11 +28,12 @@ def configure_logging(verbose: bool = False, jsonl_path: Path | None = None) -> 
     """
 
     level = logging.DEBUG if verbose else logging.INFO
-    logging.basicConfig(
-        level=level,
-        format="%(message)s",
-        handlers=[RichHandler(rich_tracebacks=True, markup=True)],
-    )
+    handler: logging.Handler
+    if RichHandler is not None:
+        handler = RichHandler(rich_tracebacks=True, markup=True)
+    else:
+        handler = logging.StreamHandler()
+    logging.basicConfig(level=level, format="%(message)s", handlers=[handler])
 
     if jsonl_path:
         jsonl_path.parent.mkdir(parents=True, exist_ok=True)

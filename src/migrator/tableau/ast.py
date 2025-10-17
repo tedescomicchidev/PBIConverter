@@ -4,7 +4,10 @@ from __future__ import annotations
 
 from typing import List, Optional
 
-from pydantic import BaseModel
+try:  # pragma: no cover - optional dependency
+    from pydantic import BaseModel  # type: ignore
+except Exception:  # pragma: no cover - fallback
+    from .._compat.pydantic import BaseModel
 
 
 class Expression(BaseModel):
