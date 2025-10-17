@@ -4,7 +4,18 @@ from __future__ import annotations
 
 import json
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional, Tuple, Type, TypeVar, get_args, get_origin, get_type_hints
+from typing import (
+    Any,
+    Dict,
+    List,
+    Optional,
+    Tuple,
+    Type,
+    TypeVar,
+    get_args,
+    get_origin,
+    get_type_hints,
+)
 
 
 _T = TypeVar("_T", bound="BaseModel")
@@ -17,7 +28,9 @@ class FieldInfo:
     description: Optional[str] = None
 
 
-def Field(default: Any, *, alias: Optional[str] = None, description: Optional[str] = None) -> FieldInfo:
+def Field(
+    default: Any, *, alias: Optional[str] = None, description: Optional[str] = None
+) -> FieldInfo:
     """Emulate :func:`pydantic.Field` for simple use-cases."""
 
     return FieldInfo(default=default, alias=alias, description=description)

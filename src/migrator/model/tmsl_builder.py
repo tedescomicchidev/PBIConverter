@@ -32,7 +32,9 @@ class TMSLBuilder:
         else:
             self.env = None
 
-    def build_model(self, manifest: Manifest, translations: List[DAXTranslationResult]) -> ModelBuildResult:
+    def build_model(
+        self, manifest: Manifest, translations: List[DAXTranslationResult]
+    ) -> ModelBuildResult:
         measures = [measure for result in translations for measure in result.measures]
         if self.env:
             template = self.env.get_template("dataset.tmsl.j2")

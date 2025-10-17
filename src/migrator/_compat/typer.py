@@ -83,7 +83,9 @@ class Command:
                 if token not in self.options:
                     raise BadParameter(f"Unknown option {token}")
                 param_name = self.options[token]
-                annotation = self.type_hints.get(param_name, self.signature.parameters[param_name].annotation)
+                annotation = self.type_hints.get(
+                    param_name, self.signature.parameters[param_name].annotation
+                )
                 if _is_bool(annotation) or isinstance(values.get(param_name), bool):
                     consumed[param_name] = True
                     i += 1
@@ -112,7 +114,9 @@ class Typer:
         self.help = help
         self.commands: Dict[str, Command] = {}
 
-    def command(self, name: Optional[str] = None) -> Callable[[Callable[..., Any]], Callable[..., Any]]:
+    def command(
+        self, name: Optional[str] = None
+    ) -> Callable[[Callable[..., Any]], Callable[..., Any]]:
         def decorator(func: Callable[..., Any]) -> Callable[..., Any]:
             command_name = name or func.__name__.replace("_", "-")
             self.commands[command_name] = Command(func)

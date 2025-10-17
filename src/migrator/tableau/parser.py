@@ -106,7 +106,9 @@ def _parse_primary(stream: TokenStream, token: Token) -> Expression:
             if _match_keyword(stream, "ELSE"):
                 else_branch = _parse_expression(stream, 0)
             _expect_keyword(stream, "END")
-            return IfExpression(condition=condition, then_branch=then_branch, else_branch=else_branch)
+            return IfExpression(
+                condition=condition, then_branch=then_branch, else_branch=else_branch
+            )
         # function call or bare identifier
         args = _parse_argument_list(stream)
         return FunctionCall(name=keyword, arguments=args)

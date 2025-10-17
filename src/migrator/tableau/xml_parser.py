@@ -52,8 +52,14 @@ class TableauWorkbook:
                 name = _get_attr(calc, "name") or "Unnamed"
                 formula = _get_text(calc)
                 expression = formula_parser.parse_expression(formula)
-                calculated.append(CalculatedField(name=name, formula=formula, expression=expression))
-            worksheets.append(Worksheet(name=_get_attr(worksheet_node, "name") or "Sheet", calculated_fields=calculated))
+                calculated.append(
+                    CalculatedField(name=name, formula=formula, expression=expression)
+                )
+            worksheets.append(
+                Worksheet(
+                    name=_get_attr(worksheet_node, "name") or "Sheet", calculated_fields=calculated
+                )
+            )
         return cls(path=path, worksheets=worksheets)
 
 

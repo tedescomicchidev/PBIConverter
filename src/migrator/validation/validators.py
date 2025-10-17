@@ -43,7 +43,9 @@ class MigrationReport:
 
 
 class MigrationValidator:
-    def validate(self, manifest: Manifest, translations: List[DAXTranslationResult]) -> MigrationReport:
+    def validate(
+        self, manifest: Manifest, translations: List[DAXTranslationResult]
+    ) -> MigrationReport:
         issues = []
         if not translations:
             issues.append(ValidationIssue(message="No translations generated", severity="warning"))

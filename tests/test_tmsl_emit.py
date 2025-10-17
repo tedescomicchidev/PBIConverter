@@ -36,8 +36,15 @@ def test_tmsl_builder_outputs_valid_json(tmp_path: Path) -> None:
     builder = TMSLBuilder(settings=settings, template_dir=Path("templates"))
     manifest = Manifest(workbooks=[])
     translations = [
-        DAXTranslationResult(measures=[DAXMeasure(name="Profit Ratio", expression="DIVIDE([Profit], [Sales])", source="")])
+        DAXTranslationResult(
+            measures=[
+                DAXMeasure(name="Profit Ratio", expression="DIVIDE([Profit], [Sales])", source="")
+            ]
+        )
     ]
     result = builder.build_model(manifest, translations)
     parsed = json.loads(result.tmsl_json)
-    assert parsed["createOrReplace"]["database"]["model"]["tables"][0]["measures"][0]["name"] == "Profit Ratio"
+    assert (
+        parsed["createOrReplace"]["database"]["model"]["tables"][0]["measures"][0]["name"]
+        == "Profit Ratio"
+    )

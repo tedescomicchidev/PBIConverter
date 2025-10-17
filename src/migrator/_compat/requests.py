@@ -12,7 +12,9 @@ class Response:
     text: str = ""
 
 
-def post(url: str, headers: Optional[Dict[str, Any]] = None, data: Optional[str] = None) -> Response:  # pragma: no cover - stub
+def post(
+    url: str, headers: Optional[Dict[str, Any]] = None, data: Optional[str] = None
+) -> Response:  # pragma: no cover - stub
     return Response(status_code=200, text="")
 
 
