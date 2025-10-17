@@ -1,0 +1,14 @@
+{
+  "workbooks": [
+    {
+      "name": "Superstore",
+      "path": "examples/Superstore.twb",
+      "project": "Default",
+      "target_workspace": "00000000-0000-0000-0000-000000000000",
+      "strategy": "auto",
+      "options": {
+        "enforce_transform": false
+      }
+    }
+  ]
+}

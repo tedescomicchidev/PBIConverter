@@ -1,0 +1,49 @@
+{
+  "createOrReplace": {
+    "object": {
+      "database": {
+        "name": "{{ settings.naming.dataset_prefix }}MigratedDataset"
+      }
+    },
+    "database": {
+      "name": "{{ settings.naming.dataset_prefix }}MigratedDataset",
+      "compatibilityLevel": 1520,
+      "model": {
+        "tables": [
+          {
+            "name": "Measures",
+            "partitions": [
+              {
+                "name": "MeasuresPartition",
+                "source": {
+                  "type": "calculated"
+                }
+              }
+            ],
+            "measures": [
+              {% for measure in measures %}
+              {
+                "name": "{{ measure.name }}",
+                "expression": "{{ measure.expression | replace('"', '\\"') }}",
+                "description": "Translated from Tableau"
+              }{% if not loop.last %},{% endif %}
+              {% endfor %}
+            ]
+          },
+          {
+            "name": "Date",
+            "partitions": [
+              {
+                "name": "DatePartition",
+                "source": {
+                  "type": "calculated",
+                  "expression": "EVALUATE CALENDAR(DATE(2010,1,1), DATE(2030,12,31))"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

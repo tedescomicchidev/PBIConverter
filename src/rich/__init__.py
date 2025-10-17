@@ -1,0 +1,1 @@
+"""Minimal Rich shim."""
